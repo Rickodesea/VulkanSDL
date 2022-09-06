@@ -25,7 +25,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute.
 
 <br/><br/>
 
-If you are getting this warning when you run the code on Linux:```
+If you are getting this warning when you run the code on Linux:
 ```
 MESA-INTEL: warning: Performance support disabled, consider sysctl dev.i915.perf_stream_paranoid=0
 ```
