@@ -72,8 +72,6 @@ bin/
 # MANUAL
 doc/manual/_build/
 
-# Other
-build.json
 
 
 
