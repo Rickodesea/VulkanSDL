@@ -1,0 +1,32 @@
+{
+	"flags" : {
+		"exec":"",
+		"shared":"-fPIC",
+		"static":"",
+		"common":"-Wall -g",
+		"lib-shared" : "--shared",
+		"lib-static" : "-rcs",
+		"bin" : "",
+		"extern_lib_bin": "-lSDL2 -lvulkan -ldl"
+	},
+	"library" : {
+		"vulkansdl" : "@all"
+	},
+	"exec" : {
+		"main.c" : "vulkansdl"
+	},
+	"ignore" : {
+		"folder" : ["bin"],
+		"file" : []
+	},
+	"library-remove-file" : {
+	},
+	"script-ignore" : [
+	],
+	"exec-config" : {
+		"main.c" : {
+			"include" : "`sdl2-config --cflags`",
+			"library" : "`sdl2-config --libs`"
+		}
+	}
+}

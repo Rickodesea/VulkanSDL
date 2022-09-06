@@ -24,5 +24,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute.
 
 
 <br/><br/>
-# VulkanSDL
-# VulkanSDL
+
