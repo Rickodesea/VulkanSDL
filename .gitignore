@@ -72,6 +72,8 @@ bin/
 # MANUAL
 doc/manual/_build/
 
+Build/
+
 
 
 
