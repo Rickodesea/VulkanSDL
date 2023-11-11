@@ -5,17 +5,8 @@ This is a template code base for implement Vulkan on SDL.  It was coded on linux
 work on other platforms.  The code is meant for quick re-use (as is or freely edited).
 It is written completely in C (hardly any C Vulkan tutorial out there) and the code is well documented.
 
-<br><br><br>
-If you are getting this warning when you run the code on Linux:
-```
-MESA-INTEL: warning: Performance support disabled, consider sysctl dev.i915.perf_stream_paranoid=0
-```
-
-Try running this to resolve:
-```
-sudo sysctl -w dev.i915.perf_stream_paranoid=0
-```
-<br><br><br>
+You will have to get `glslangValidator` to compile the shaders.  Put the compiled shaders in the
+build directory containing your `main` program.
 
 ## License
 This project is licensed under the zlib license - see the [LICENSE](LICENSE) file for details.
