@@ -6,6 +6,9 @@
 #include <vulkan/vulkan.h>
 #include <stdbool.h>
 
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_vulkan.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

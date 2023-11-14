@@ -4,17 +4,20 @@
 #include <vulkan/vulkan.h>
 #include <stdbool.h>
 
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_vulkan.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
 enum {
-REQUESTED_SWAPCHAIN_SIZE  = 4, ///< number of swapchain images
+DEFAULT_SWAPCHAIN_SIZE  = 4, ///< number of swapchain images
 };
-#define REQUESTED_FORMAT       VK_FORMAT_R8G8B8_UNORM
-#define REQUESTED_SAMPLE_COUNT VK_SAMPLE_COUNT_8_BIT
-#define REQUESTED_MODE         VK_PRESENT_MODE_MAILBOX_KHR
+#define DEFAULT_SURFACE_FORMAT VK_FORMAT_R8G8B8_UNORM
+#define DEFAULT_SAMPLE_COUNT   VK_SAMPLE_COUNT_8_BIT
+#define DEFAULT_PRESENT_MODE   VK_PRESENT_MODE_MAILBOX_KHR
 #define VERTEX_SHADER_PATH   "./shader.vert.spv"
 #define FRAGMENT_SHADER_PATH "./shader.frag.spv"
 
@@ -48,18 +51,14 @@ REQUESTED_SWAPCHAIN_SIZE  = 4, ///< number of swapchain images
     F(P, Q, &N, B); \
 } while(0);
 
-#define RETURN_IF_VK_FAIL( FCS ) do{ \
-    const VkResult R = FCS; \
-    const int B = \
-        R == VK_SUCCESS || \
-        R == VK_NOT_READY || \
-        R == VK_TIMEOUT || \
-        R == VK_EVENT_SET || \
-        R == VK_EVENT_RESET || \
-        R == VK_INCOMPLETE || \
-        R == VK_SUBOPTIMAL_KHR \
-    ; \
-    if(B == 0){SDL_Log("%d Failed", __LINE__); exit(EXIT_FAILURE);} \
+#define RETURN_VK_RESULT( R, M, ... ) do{ \
+    if(ConfirmVkSuccess(R) == false)\
+    {SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", M); return __VA_ARGS__;} \
+}while(0);
+
+#define EXIT_VK_RESULT( R, M ) do{ \
+    if(ConfirmVkSuccess(R) == false)\
+    {SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", M); exit (EXIT_FAILURE);} \
 }while(0);
 
 VkSurfaceFormatKHR GetAvailableSurfaceFormat(VkFormat requested);
@@ -68,10 +67,11 @@ VkDebugUtilsMessengerCreateInfoEXT GetDebugUtilsMessengerInfo();
 VkPresentModeKHR GetAvailablePresentMode(VkPresentModeKHR requested);
 uint32_t GetAvailableSwapchainSize(uint32_t requested);
 VkShaderModule CreateShaderModule(const char* path);
+bool ConfirmVkSuccess(VkResult result);
 bool ConfirmVkResult(VkResult result);
-VkFence CreateFence(VkFenceCreateInfo info);
-VkSemaphore CreateSemaphore(VkSemaphoreCreateInfo info);
-void ExitVkError(VkResult result, const char* message);
+const char* GetVkResultString(VkResult result);
+VkFence CreateFence(void);
+VkSemaphore CreateSemaphore(void);
 
 #ifdef __cplusplus
 }

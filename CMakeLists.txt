@@ -48,9 +48,10 @@ add_library(event
 )
 
 add_library(vulkan
-  Source/vulkan/vk.c
   Source/vulkan/vk-global.c
   Source/vulkan/vk-utils.c
+  Source/vulkan/vk-std.c
+  Source/vulkan/vk.c
 )
 
 ## Executables --------------------------------

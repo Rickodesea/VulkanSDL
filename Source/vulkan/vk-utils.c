@@ -379,22 +379,6 @@ void vx_map_memory(
 }
 */
 
-VkFence CreateFence(VkFenceCreateInfo info) 
-{
-    VkFence fence = VK_NULL_HANDLE;
-    info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    ExitVkError(vkCreateFence(device, &info, 0, &fence), "Failed to create Vulkan Fence");
-    return fence;
-}
-
-VkSemaphore CreateSemaphore(VkSemaphoreCreateInfo info) 
-{
-    VkSemaphore semaphore = VK_NULL_HANDLE;
-    info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-    ExitVkError(vkCreateSemaphore(device, &info, 0, &semaphore), "Failed to create Vulkan Semaphore");
-    return semaphore;
-}
-
 bool ConfirmVkResult(VkResult result) 
 {
     if ( 
@@ -411,11 +395,47 @@ bool ConfirmVkResult(VkResult result)
     return false;
 }
 
-void ExitVkError(VkResult result, const char* message)
+bool ConfirmVkSuccess(VkResult result) 
 {
-    if(result != VK_SUCCESS)
-    {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", message);
-        exit(EXIT_FAILURE);
+    if ( 
+        result == VK_SUCCESS
+    ) {
+        return true;
     }
+    return false;
 }
+
+const char* GetVkResultString(VkResult result)
+{
+    switch(result)
+    {
+        case VK_SUCCESS: return "Success";
+        case VK_TIMEOUT: return "Timeout";
+        case VK_INCOMPLETE: return "Incomplete";
+        case VK_NOT_READY: return "Not Ready";
+        case VK_EVENT_SET: return "Event Set";
+        case VK_EVENT_RESET: return "Event Reset";
+        case VK_SUBOPTIMAL_KHR: return "Suboptimal KHR";
+    }
+    return "Unknown";
+}
+
+VkFence CreateFence(void) 
+{
+    VkFence fence = VK_NULL_HANDLE;
+    VkFenceCreateInfo info = {};
+    info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    EXIT_VK_RESULT(vkCreateFence(device, &info, 0, &fence), "Failed to create Vulkan Fence");
+    return fence;
+}
+
+VkSemaphore CreateSemaphore(void) 
+{
+    VkSemaphore semaphore = VK_NULL_HANDLE;
+    VkSemaphoreCreateInfo info = {};
+    info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+    EXIT_VK_RESULT(vkCreateSemaphore(device, &info, 0, &semaphore), "Failed to create Vulkan Semaphore");
+    return semaphore;
+}
+
+
