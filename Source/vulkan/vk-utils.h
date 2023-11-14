@@ -53,12 +53,12 @@ DEFAULT_SWAPCHAIN_SIZE  = 4, ///< number of swapchain images
 
 #define RETURN_VK_RESULT( R, M, ... ) do{ \
     if(ConfirmVkSuccess(R) == false)\
-    {SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", M); return __VA_ARGS__;} \
+    {SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s : %s", M, GetVkResultString(R)); return __VA_ARGS__;} \
 }while(0);
 
 #define EXIT_VK_RESULT( R, M ) do{ \
     if(ConfirmVkSuccess(R) == false)\
-    {SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", M); exit (EXIT_FAILURE);} \
+    {SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s : %s", M, GetVkResultString(R)); exit (EXIT_FAILURE);} \
 }while(0);
 
 VkSurfaceFormatKHR GetAvailableSurfaceFormat(VkFormat requested);
