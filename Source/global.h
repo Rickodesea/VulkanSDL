@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 
-#include "SDL2/SDL.h"
+#include <SDL3/SDL.h>
 
 #define NAME "C SDL2 Vulkan Starter"
 #define DESCRIPTION "90s Military RTS Game"

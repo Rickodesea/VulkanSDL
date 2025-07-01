@@ -6,7 +6,7 @@
 #include <string.h>
 
 //3rd-party project libraries
-#include "SDL2/SDL.h"
+#include <SDL3/SDL.h>
 
 //project source
 #include "app.h"
@@ -16,7 +16,7 @@
 
 static void CreateApp()
 {
-    if( SDL_Init( SDL_INIT_VIDEO ) != 0 )
+    if( SDL_Init( SDL_INIT_VIDEO ) != true )
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL");
         exit(EXIT_FAILURE);
@@ -24,11 +24,9 @@ static void CreateApp()
 
     window = SDL_CreateWindow(
         NAME " - " DESCRIPTION,
-        SDL_WINDOWPOS_UNDEFINED,
-        SDL_WINDOWPOS_UNDEFINED,
         WIDTH,
         HEIGHT,
-        SDL_WINDOW_VULKAN | SDL_WINDOW_SHOWN
+        SDL_WINDOW_VULKAN
     );
 
     if( window == NULL )

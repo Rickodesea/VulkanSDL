@@ -1,6 +1,7 @@
 #include "vk-utils.h"
 #include "vk-global.h"
-#include "SDL2/SDL.h"
+#include <SDL3/SDL.h>
+#include <stdlib.h>
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL CallbackDebug(
     VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, 
@@ -19,7 +20,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL CallbackDebug(
 
 VkDebugUtilsMessengerCreateInfoEXT GetDebugUtilsMessengerInfo() 
 {
-    VkDebugUtilsMessengerCreateInfoEXT info = {};
+    VkDebugUtilsMessengerCreateInfoEXT info = {0};
     info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
     info.messageSeverity = 
         VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | 
@@ -172,16 +173,16 @@ VkShaderModule CreateShaderModule(const char* path)
 {
     VkShaderModule shadermodule = VK_NULL_HANDLE;
 
-    SDL_RWops* io = SDL_RWFromFile(path, "rb");
+    SDL_IOStream* io = SDL_IOFromFile(path, "rb");
 
     if(io) {
-        const uint32_t size = SDL_RWseek (io, 0, RW_SEEK_END) ;
-        SDL_RWseek (io, 0, RW_SEEK_SET) ;
+        const uint32_t size = SDL_SeekIO (io, 0, SDL_IO_SEEK_END) ;
+        SDL_SeekIO (io, 0, SDL_IO_SEEK_SET) ;
         uint32_t* buffer = calloc(size / sizeof(uint32_t) + 1, sizeof(uint32_t));
         memset(buffer, 0, size);
-        SDL_RWread(io, buffer, size, 1);
+        SDL_ReadIO(io, buffer, size);
 
-        VkShaderModuleCreateInfo info_create = {};
+        VkShaderModuleCreateInfo info_create = {0};
         info_create.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
         info_create.codeSize = size;
         info_create.pCode = buffer;
@@ -441,7 +442,7 @@ const char* GetVkResultString(VkResult result)
 VkFence CreateFence(void) 
 {
     VkFence fence = VK_NULL_HANDLE;
-    VkFenceCreateInfo info = {};
+    VkFenceCreateInfo info = {0};
     info.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     EXIT_VK_RESULT(vkCreateFence(device, &info, 0, &fence), "Failed to create Vulkan Fence");
     return fence;
@@ -450,7 +451,7 @@ VkFence CreateFence(void)
 VkSemaphore CreateSemaphore(void) 
 {
     VkSemaphore semaphore = VK_NULL_HANDLE;
-    VkSemaphoreCreateInfo info = {};
+    VkSemaphoreCreateInfo info = {0};
     info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     EXIT_VK_RESULT(vkCreateSemaphore(device, &info, 0, &semaphore), "Failed to create Vulkan Semaphore");
     return semaphore;

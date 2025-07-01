@@ -13,9 +13,9 @@
 void CreateInstance(char* name, uint32_t version)
 {
     const char* names_layer[] = {
-        #ifdef DEBUG
+        //#ifdef DEBUG
         "VK_LAYER_KHRONOS_validation"
-        #endif
+        //#endif
     };
     const uint32_t count_names_layer = sizeof(names_layer) / sizeof(char*);
 
@@ -30,14 +30,14 @@ void CreateInstance(char* name, uint32_t version)
         #endif
     );
 
-    VkApplicationInfo info_app = {};
+    VkApplicationInfo info_app = {0};
     info_app.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     info_app.apiVersion = VK_API_VERSION_1_3;
     info_app.pEngineName = "C SDL2 Vulkan";
     info_app.pApplicationName = name;
     info_app.applicationVersion = version;
 
-    VkInstanceCreateInfo info_create = {};
+    VkInstanceCreateInfo info_create = {0};
     info_create.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     info_create.pApplicationInfo = &info_app;
     info_create.enabledExtensionCount = count_instance_extensions;
@@ -60,7 +60,7 @@ void DestroyInstance()
 
 void CreateSurface() 
 {
-    if( SDL_Vulkan_CreateSurface(window, instance, &surface) == SDL_FALSE) {
+    if( SDL_Vulkan_CreateSurface(window, instance, NULL, &surface) == false) {
         SDL_Log("Failed to create Vulkan Surface");
         exit(EXIT_FAILURE);
     }
@@ -84,7 +84,7 @@ void CreateDevice()
 	uint32_t score_max = 0;
 
 	for (uint32_t i = 0; i < count_physicaldevices; i++) {
-		VkPhysicalDeviceProperties ppd = { };
+		VkPhysicalDeviceProperties ppd = {0};
 		vkGetPhysicalDeviceProperties(physicaldevices[i], &ppd);
 		DEFINE_ENUMERATE(
 			VkQueueFamilyProperties,
@@ -134,11 +134,12 @@ void CreateDevice()
     const char* names_extension[] = {
         "VK_KHR_swapchain"
     };
-    const uint32_t count_extension = sizeof(names_extension) / sizeof(char*);
+
+    #define count_extension (sizeof(names_extension) / sizeof(char*))
 
     if(count_extension > 1)
     {
-        const uint32_t max_available_extensions = 64;
+        #define max_available_extensions 64
         uint32_t count_available_extensions = 0; 
         VkExtensionProperties properties_available_extensions[max_available_extensions];
 

@@ -4,8 +4,8 @@
 #include <vulkan/vulkan.h>
 #include <stdbool.h>
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_vulkan.h"
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_vulkan.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,11 +21,9 @@ DEFAULT_SWAPCHAIN_SIZE  = 4, ///< number of swapchain images
 #define VERTEX_SHADER_PATH   "./shader.vert.spv"
 #define FRAGMENT_SHADER_PATH "./shader.frag.spv"
 
-#define DEFINE_INSTANCE_EXTENSIONS(W, N, B, S, ...) const char* B[S] = {}; uint32_t N = 0; do { \
-    SDL_Vulkan_GetInstanceExtensions(W, &N, 0); \
-    N = (N < S) ? N : S; \
-    SDL_bool result = SDL_Vulkan_GetInstanceExtensions(W, &N, B); \
-    if(result == SDL_FALSE) \
+#define DEFINE_INSTANCE_EXTENSIONS(W, N, B, S, ...) const char * const * B; uint32_t N = 0; do { \
+    B = SDL_Vulkan_GetInstanceExtensions(&N); \
+    if(N == 0) \
     { \
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to get Vulkan Instance Extensions"); \
         exit(EXIT_FAILURE); \
@@ -39,13 +37,13 @@ DEFAULT_SWAPCHAIN_SIZE  = 4, ///< number of swapchain images
     } \
 } while(0);
 
-#define DEFINE_ENUMERATE(T, F, P, N, B, S) T B[S] = {}; uint32_t N = 0; do { \
+#define DEFINE_ENUMERATE(T, F, P, N, B, S) T B[S] = {0}; uint32_t N = 0; do { \
     F(P, &N, 0); \
     N = (N < S) ? N : S; \
     F(P, &N, B); \
 } while(0);
 
-#define DEFINE_ENUMERATE_2(T, F, P, Q, N, B, S) T B[S] = {}; uint32_t N = 0; do { \
+#define DEFINE_ENUMERATE_2(T, F, P, Q, N, B, S) T B[S] = {0}; uint32_t N = 0; do { \
     F(P, Q, &N, 0); \
     N = (N < S) ? N : S; \
     F(P, Q, &N, B); \

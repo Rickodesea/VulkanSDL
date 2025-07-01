@@ -16,22 +16,8 @@ include(override)
 include_directories(Source)
 
 ## Required Installed Libraries
-find_package(Vulkan 1 REQUIRED)
-
-## 3rd Parties --------------------------------
-include(FetchContent)
-
-### Declares
-FetchContent_Declare(
-  SDL2
-  GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-  GIT_TAG        release-2.28.5
-)
-
-### MakeAvailable
-set(MESSAGE_QUIET TRUE)
-FetchContent_MakeAvailable(SDL2)
-unset(MESSAGE_QUIET)
+find_package(Vulkan 1.3 REQUIRED) # use the latest vulkan features (u can downgrade this if u like)
+find_package(SDL3 REQUIRED) # ensure to have SDL3 installed
 
 ## Libraries ----------------------------------
 
@@ -39,12 +25,28 @@ add_library(app
   Source/app.c
 )
 
+target_link_libraries(app
+    PUBLIC SDL3::SDL3
+    PUBLIC Vulkan::Vulkan
+)
+
+
 add_library(global
   Source/global.c
 )
 
+target_link_libraries(global
+    PUBLIC SDL3::SDL3
+    PUBLIC Vulkan::Vulkan
+)
+
 add_library(event
   Source/event/event.c
+)
+
+target_link_libraries(event
+    PUBLIC SDL3::SDL3
+    PUBLIC Vulkan::Vulkan
 )
 
 add_library(vulkan
@@ -53,6 +55,12 @@ add_library(vulkan
   Source/vulkan/vk-std.c
   Source/vulkan/vk.c
 )
+
+target_link_libraries(vulkan
+    PUBLIC SDL3::SDL3
+    PUBLIC Vulkan::Vulkan
+)
+
 
 ## Executables --------------------------------
 
@@ -69,7 +77,7 @@ target_link_libraries(main
     PRIVATE global
     PRIVATE event
     PUBLIC vulkan
-    PUBLIC SDL2
+    PUBLIC SDL3::SDL3
     PUBLIC Vulkan::Vulkan
 )
 
